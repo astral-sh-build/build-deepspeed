@@ -1,3 +1,27 @@
+#!/bin/bash
+# Script to prepare the build environment for DeepSpeed.
+#
+# Example usage:
+#   ./prepare_for_build.sh v0.16.7
+
+set -euxo pipefail
+
+export ROOT=`pwd`
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <deepspeed_version>"
+    echo "Example: $0 v0.16.7"
+    exit 1
+fi
+
+DEEPSPEED_VERSION=$1
+
+# Ensure that the DeepSped version is supported.
+if [ ! -d "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}" ]; then
+    echo "Error: patches/${DEEPSPEED_VERSION} directory does not exist"
+    exit 1
+fi
+
 # We want to figure out the CUDA version to download pytorch
 # e.g. we can have system CUDA version being 11.7 but if torch==1.12 then we need to download the wheel from cu116
 # see https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
@@ -25,24 +49,10 @@ cd /project
 sed -i "s/'-laio'/'-Wl,-Bstatic', '-laio', '-Wl,-Bdynamic'/g" op_builder/async_io.py
 sed -i "s/'-laio'/'-Wl,-Bstatic', '-laio', '-Wl,-Bdynamic'/g" op_builder/cpu/async_io.py
 
-# Patch DeepSpeed avoid querying `torch` directly.
-#
-# Without this, fails at import time: https://github.com/astral-sh/build-deepspeed/actions/runs/14867513759/job/41747866280?pr=1
-#
-# diff --git a/accelerator/cuda_accelerator.py b/accelerator/cuda_accelerator.py
-# index 06fd443f..78c8de24 100644
-# --- a/accelerator/cuda_accelerator.py
-# +++ b/accelerator/cuda_accelerator.py
-# @@ -242,6 +242,8 @@ class CUDA_Accelerator(DeepSpeedAccelerator):
-#          return self._communication_backend_name
-#
-#      def is_triton_supported(self):
-# +        if not torch.cuda.is_available():
-# +            return False
-#          major, _ = torch.cuda.get_device_capability()
-#          if major >= 8:
-#              return True
-cp build_scripts/cuda_accelerator.py accelerator/cuda_accelerator.py
+# Apply patches.
+for patch in "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}"/*.patch; do
+    patch -p1 -d ${ROOT} -i ${patch}
+done
 
 pip install hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
 
