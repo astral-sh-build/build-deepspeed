@@ -72,6 +72,7 @@ jobs:
         with:
           repository: deepspeedai/DeepSpeed
           ref: ${{ env.DEEPSPEED_VERSION }}
+          persist-credentials: false
 
       - name: Checkout cutlass repo
         uses: actions/checkout@v4
@@ -79,11 +80,13 @@ jobs:
           repository: NVIDIA/cutlass
           ref: ${{ env.CUTLASS_VERSION }}
           path: cutlass
+          persist-credentials: false
 
       - name: Checkout utils
         uses: actions/checkout@v4
         with:
           path: build_scripts
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@v5
