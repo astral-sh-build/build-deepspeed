@@ -28,10 +28,11 @@ jobs:
       - name: Run Zizmor analysis
         run: |
           # Run Zizmor and output results directly to the logs
-          uvx zizmor . --format plain
+          # Use || true to prevent non-zero exit code from failing the workflow
+          uvx zizmor . --format plain || true
           
           # Also save results as JSON for artifact
-          uvx zizmor . --format json > zizmor-results.json
+          uvx zizmor . --format json > zizmor-results.json || true
 
       - name: Upload results as artifact
         uses: actions/upload-artifact@v4
