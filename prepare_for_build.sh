@@ -34,6 +34,7 @@ fi
 
 patch -p1 -i ${ROOT}/build_scripts/patches/cuda-accelerator
 patch -p1 -i ${ROOT}/build_scripts/patches/ds-transformer
+patch -p1 -i ${ROOT}/build_scripts/patches/async_io
 
 pip install hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
 
