@@ -1,4 +1,4 @@
-name: Zizmor Static Analysis
+name: Zizmor
 
 on:
   push:
@@ -28,14 +28,4 @@ jobs:
       - name: Run Zizmor analysis
         run: |
           # Run Zizmor and output results directly to the logs
-          # Use || true to prevent non-zero exit code from failing the workflow
-          uvx zizmor . --format plain || true
-          
-          # Also save results as JSON for artifact
-          uvx zizmor . --format json > zizmor-results.json || true
-
-      - name: Upload results as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: zizmor-analysis-results
-          path: zizmor-results.json
+          uvx zizmor . --format plain
