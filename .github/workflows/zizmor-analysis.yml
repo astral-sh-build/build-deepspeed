@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  security-events: write  # Needed for GitHub code scanning integration
 
 jobs:
   analyze:
@@ -33,11 +32,14 @@ jobs:
 
       - name: Run Zizmor analysis
         run: |
-          # Run Zizmor and output results in SARIF format for GitHub code scanning
-          zizmor . --format sarif > zizmor-results.sarif
+          # Run Zizmor and output results directly to the logs
+          zizmor . --format plain
+          
+          # Also save results as JSON for artifact
+          zizmor . --format json > zizmor-results.json
 
-      - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v3
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: zizmor-results.sarif
-          category: zizmor
+          name: zizmor-analysis-results
+          path: zizmor-results.json
