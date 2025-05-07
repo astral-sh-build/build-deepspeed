@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@latest
+        uses: astral-sh/setup-uv@v6
 
       - name: Run Zizmor analysis
         run: |
