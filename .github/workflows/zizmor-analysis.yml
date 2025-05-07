@@ -22,21 +22,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Zizmor
-        run: pip install zizmor
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v1
 
       - name: Run Zizmor analysis
         run: |
           # Run Zizmor and output results directly to the logs
-          zizmor . --format plain
+          uvx zizmor . --format plain
           
           # Also save results as JSON for artifact
-          zizmor . --format json > zizmor-results.json
+          uvx zizmor . --format json > zizmor-results.json
 
       - name: Upload results as artifact
         uses: actions/upload-artifact@v4
