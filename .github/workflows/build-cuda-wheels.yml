@@ -21,155 +21,45 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#           - torch-version: "2.5.1"
-#             python-version: "3.9"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.9"
-#             cuda-version: "12.1.1"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.9"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.10"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.10"
-#             cuda-version: "12.1.1"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.10"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.11"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.11"
-#             cuda-version: "12.1.1"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.11"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.12"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.12"
-#             cuda-version: "12.1.1"
-#             cxx11abi: FALSE
-#           - torch-version: "2.5.1"
-#             python-version: "3.12"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
-
-#           - torch-version: "2.6.0"
-#             python-version: "3.9"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.9"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
            - torch-version: "2.6.0"
              python-version: "3.9"
-             cuda-version: "12.6.0"
+             cuda-version: "11.8.0"
              cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.10"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.10"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
+           - torch-version: "2.6.0"
+             python-version: "3.9"
+             cuda-version: "12.4.0"
+             cxx11abi: FALSE
            - torch-version: "2.6.0"
              python-version: "3.10"
-             cuda-version: "12.6.0"
+             cuda-version: "11.8.0"
              cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.11"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.11"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
+           - torch-version: "2.6.0"
+             python-version: "3.10"
+             cuda-version: "12.4.0"
+             cxx11abi: FALSE
            - torch-version: "2.6.0"
              python-version: "3.11"
-             cuda-version: "12.6.0"
+             cuda-version: "11.8.0"
              cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.12"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.12"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
+           - torch-version: "2.6.0"
+             python-version: "3.11"
+             cuda-version: "12.4.0"
+             cxx11abi: FALSE
            - torch-version: "2.6.0"
              python-version: "3.12"
-             cuda-version: "12.6.0"
+             cuda-version: "11.8.0"
              cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.13"
-#             cuda-version: "11.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.6.0"
-#             python-version: "3.13"
-#             cuda-version: "12.4.0"
-#             cxx11abi: FALSE
+           - torch-version: "2.6.0"
+             python-version: "3.12"
+             cuda-version: "12.4.0"
+             cxx11abi: FALSE
            - torch-version: "2.6.0"
              python-version: "3.13"
-             cuda-version: "12.6.0"
+             cuda-version: "11.8.0"
              cxx11abi: FALSE
-
-#           - torch-version: "2.7.0"
-#             python-version: "3.9"
-#             cuda-version: "12.6.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.7.0"
-#             python-version: "3.9"
-#             cuda-version: "12.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.7.0"
-#             python-version: "3.10"
-#             cuda-version: "12.6.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.7.0"
-#             python-version: "3.10"
-#             cuda-version: "12.8.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.7.0"
-#             python-version: "3.11"
-#             cuda-version: "12.6.0"
-#             cxx11abi: FALSE
-#           - torch-version: "2.7.0"
-#             python-version: "3.11"
-#             cuda-version: "12.8.0"
-#             cxx11abi: FALSE
-           - torch-version: "2.7.0"
-             python-version: "3.12"
-             cuda-version: "12.6.0"
-             cxx11abi: FALSE
-           - torch-version: "2.7.0"
-             python-version: "3.12"
-             cuda-version: "12.8.0"
-             cxx11abi: FALSE
-           - torch-version: "2.7.0"
+           - torch-version: "2.6.0"
              python-version: "3.13"
-             cuda-version: "12.6.0"
-             cxx11abi: FALSE
-           - torch-version: "2.7.0"
-             python-version: "3.13"
-             cuda-version: "12.8.0"
+             cuda-version: "12.4.0"
              cxx11abi: FALSE
 
     steps:
