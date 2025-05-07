@@ -37,18 +37,6 @@ pip --version
 which python
 which pip
 
-# Download `libaio`.
-echo "Install libaio 0.3.113..."
-curl https://pagure.io/libaio/archive/libaio-0.3.113/libaio-libaio-0.3.113.tar.gz -o libaio-libaio-0.3.113.tar.gz
-tar -zxvf libaio-libaio-0.3.113.tar.gz
-cd /project/libaio-libaio-0.3.113
-make prefix=/usr install
-cd /project
-
-# Patch DeepSpeed to statically lijnk `libaio`.
-sed -i "s/'-laio'/'-Wl,-Bstatic', '-laio', '-Wl,-Bdynamic'/g" op_builder/async_io.py
-sed -i "s/'-laio'/'-Wl,-Bstatic', '-laio', '-Wl,-Bdynamic'/g" op_builder/cpu/async_io.py
-
 # Apply patches.
 for patch in "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}"/*.patch; do
     patch -p1 -d ${ROOT} -i ${patch}
