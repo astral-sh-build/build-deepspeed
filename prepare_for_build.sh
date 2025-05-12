@@ -33,16 +33,16 @@ export TORCH_CUDA_VERSION=$(python -c "from os import environ as env; \
 )
 
 python --version
-pip --version
+uv --version
 which python
-which pip
+which uv
 
 # Apply patches.
 for patch in "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}"/*.patch; do
     patch -p1 -d ${ROOT} -i ${patch}
 done
 
-pip install hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
+uv pip install hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
 
 echo "install torch==${CI_TORCH_VERSION}+cu${TORCH_CUDA_VERSION}"
-pip install --no-cache-dir torch==${CI_TORCH_VERSION} --index-url https://download.pytorch.org/whl/cu${TORCH_CUDA_VERSION}
+uv pip install --no-cache-dir torch==${CI_TORCH_VERSION} --index-url https://download.pytorch.org/whl/cu${TORCH_CUDA_VERSION}
