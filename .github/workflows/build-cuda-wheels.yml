@@ -31,40 +31,113 @@ jobs:
           - torch-version: "2.5.1"
             python-version: "3.9"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 0
           - torch-version: "2.5.1"
             python-version: "3.10"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 0
           - torch-version: "2.5.1"
             python-version: "3.11"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 0
           - torch-version: "2.5.1"
             python-version: "3.12"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
-
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 0
           - torch-version: "2.6.0"
             python-version: "3.9"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.6.0"
+            python-version: "3.9"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
           - torch-version: "2.6.0"
             python-version: "3.10"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.6.0"
+            python-version: "3.10"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
           - torch-version: "2.6.0"
             python-version: "3.11"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.6.0"
+            python-version: "3.11"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
           - torch-version: "2.6.0"
             python-version: "3.12"
             cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
           - torch-version: "2.6.0"
+            python-version: "3.12"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.9"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.9"
+            cuda-version: "12.8.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.10"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.10"
+            cuda-version: "12.8.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.11"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.11"
+            cuda-version: "12.8.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.12"
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.12"
+            cuda-version: "12.8.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
             python-version: "3.13"
-            cuda-version: "12.4.0"
-            cxx11abi: FALSE
+            cuda-version: "12.6.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            deepcompile: 1
+          - torch-version: "2.7.0"
+            python-version: "3.13"
+            cuda-version: "12.8.0"
+            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
+            deepcompile: 1
 
     steps:
       - name: Checkout Deepspeed
@@ -138,11 +211,11 @@ jobs:
             CI_TORCH_VERSION=${{ env.CI_TORCH_VERSION }}
             CI_PYTHON_VERSION=${{ env.CI_PYTHON_VERSION }}
             DS_ACCELERATOR=cuda
-            TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
+            TORCH_CUDA_ARCH_LIST="${{ matrix.arch }}"
             DS_BUILD_STRING="+cu${{ env.MATRIX_CUDA_VERSION }}torch${{ env.MATRIX_TORCH_VERSION }}"
             CXX11_ABI=${{ matrix.cxx11abi }}
             DS_BUILD_OPS=1
-            DS_BUILD_DEEP_COMPILE=0
+            DS_BUILD_DEEP_COMPILE=${{ matrix.deepcompile }}
             DS_BUILD_EVOFORMER_ATTN=0
             UV_PYTHON=/opt/python/cp${{ env.MATRIX_PYTHON_VERSION }}-cp${{ env.MATRIX_PYTHON_VERSION }}/bin/python
           CIBW_SKIP: "*musllinux*"
