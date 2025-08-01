@@ -9,11 +9,11 @@ on:
       deepspeed_version:
         description: "DeepSpeed version"
         required: true
-        default: "v0.17.0"
+        default: "v0.17.4"
         type: string
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.0' }}
+  group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.4' }}
   cancel-in-progress: true
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
     name: Build Wheel
     runs-on: depot-ubuntu-latest-8
     env:
-      DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.0' }}
+      DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.4' }}
       CUTLASS_VERSION: v3.8.0
 
     strategy:
