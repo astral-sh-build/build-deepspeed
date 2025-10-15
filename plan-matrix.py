@@ -44,7 +44,9 @@ PYTORCH_CUDA_ARCH_LIST: dict[tuple[str, str], str] = {
     ("2.7", "12.8"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
     ("2.9", "12.6"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX",
     ("2.9", "12.8"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
-    ("2.9", "13.0"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
+    # Torch 2.9 with CUDA 13 requires 7.5+.
+    # See: https://github.com/pytorch/pytorch/blob/815d6415996d5b32b569fd2a8206f1e57c75bfe3/RELEASE.md#pytorch-cuda-support-matrix
+    ("2.9", "13.0"): "7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
 }
 
 # Matrix exclusions.
