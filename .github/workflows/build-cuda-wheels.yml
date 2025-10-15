@@ -1,7 +1,6 @@
 name: Build wheels
 
-permissions:
-  contents: write
+permissions: {}
 
 on:
   pull_request:
@@ -46,6 +45,8 @@ jobs:
       DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.18.0' }}
       CUTLASS_VERSION: v3.8.0
 
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
