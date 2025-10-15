@@ -78,17 +78,17 @@ jobs:
 
       - name: Set CUDA and PyTorch versions ${{ matrix.torch-version }}+cu${{ matrix.cuda-version }}
         run: |
-          echo "CI_CUDA_VERSION=$(echo ${{ matrix.cuda-version }})" >> $GITHUB_ENV
-          echo "CI_TORCH_VERSION=$(echo ${{ matrix.torch-version }})" >> $GITHUB_ENV
-          echo "CI_PYTHON_VERSION=$(echo ${{ matrix.python-version }})" >> $GITHUB_ENV
-          echo "MATRIX_CUDA_VERSION=$(echo ${{ matrix.cuda-version }} | awk -F \. {'print $1 $2'})" >> $GITHUB_ENV
-          echo "MATRIX_TORCH_VERSION=$(echo ${{ matrix.torch-version }} | awk -F \. {'print $1 "." $2'})" >> $GITHUB_ENV
-          echo "MATRIX_PYTHON_VERSION=$(echo ${{ matrix.python-version }} | awk -F \. {'print $1 $2'})" >> $GITHUB_ENV
+          echo "CI_CUDA_VERSION=$(echo ${{ matrix.CI_CUDA_VERSION }})" >> $GITHUB_ENV
+          echo "CI_TORCH_VERSION=$(echo ${{ matrix.CI_TORCH_VERSION }})" >> $GITHUB_ENV
+          echo "CI_PYTHON_VERSION=$(echo ${{ matrix.CI_PYTHON_VERSION }})" >> $GITHUB_ENV
+          echo "MATRIX_CUDA_VERSION=$(echo ${{ matrix.MATRIX_CUDA_VERSION }})" >> $GITHUB_ENV
+          echo "MATRIX_TORCH_VERSION=$(echo ${{ matrix.MATRIX_TORCH_VERSION }})" >> $GITHUB_ENV
+          echo "MATRIX_PYTHON_VERSION=$(echo ${{ matrix.MATRIX_PYTHON_VERSION }})" >> $GITHUB_ENV
+          echo "MANYLINUX_CUDA_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_VERSION }})" >> $GITHUB_ENV
+          echo "MANYLINUX_CUDA_COMPAT_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_COMPAT_VERSION }})" >> $GITHUB_ENV
 
       - name: Install cibuildwheel
         run: |
-          echo "MANYLINUX_CUDA_VERSION=$(python -c "from os import environ as env; print({'118': '11.8', '121': '12.1', '124': '12.4', '126': '12.6', '128': '12.8'}[env['MATRIX_CUDA_VERSION']])")" >> $GITHUB_ENV
-          echo "MANYLINUX_CUDA_COMPAT_VERSION=$(python -c "from os import environ as env; print({'118': '11-8', '121': '12-1', '124': '12-4', '126': '12-6', '128': '12-8'}[env['MATRIX_CUDA_VERSION']])")" >> $GITHUB_ENV
           uv venv --python 3.13
           uv pip install cibuildwheel
 
