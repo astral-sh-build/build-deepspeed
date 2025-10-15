@@ -21,9 +21,9 @@ PYTHON_VERSIONS = [
     # "3.9",
     # "3.10",
     # "3.11",
-    # "3.12",
+    "3.12",
     "3.13",
-    "3.14",
+    # "3.14", # Not supported by DeepSpeed yet.
 ]
 
 # Supported Python versions for each PyTorch version.
