@@ -129,7 +129,7 @@ jobs:
             CI_TORCH_VERSION=${{ env.CI_TORCH_VERSION }}
             CI_PYTHON_VERSION=${{ env.CI_PYTHON_VERSION }}
             DS_ACCELERATOR=cuda
-            TORCH_CUDA_ARCH_LIST="${{ matrix.arch }}"
+            TORCH_CUDA_ARCH_LIST="${{ matrix.cuda-arch-list }}"
             DS_BUILD_STRING="+cu${{ env.MATRIX_CUDA_VERSION }}torch${{ env.MATRIX_TORCH_VERSION }}"
             CXX11_ABI=${{ matrix.cxx11abi }}
             DS_BUILD_OPS=1
