@@ -32,8 +32,8 @@ PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
 
 # Actual CUDA versions to build against for each PyTorch version.
 PYTORCH_CUDA_VERSIONS: dict[str, list[str]] = {
-    "2.7": ["12.6", "12.8"],
-    "2.9": ["12.6", "12.8", "13.0"],
+    "2.7": ["12.6.0", "12.8.0"],
+    "2.9": ["12.6.0", "12.8.0", "13.0.0"],
 }
 
 # CUDA architectures to build against for each (PyTorch version, CUDA version) pair.
@@ -57,7 +57,7 @@ def main() -> None:
     # Every matrix member is a 5-tuple of:
     # `torch-version`: the PyTorch version as "X.Y.Z", e.g. "2.7.0"
     # `python-version`: the Python version as "3.X", e.g. "3.10"
-    # `cuda-version`: the CUDA version as "X.Y", e.g. "11.8"
+    # `cuda-version`: the CUDA version as "X.Y.Z", e.g. "11.8.0"
     # `cuda-arch-list`: the CUDA architectures as a semicolon-separated list
     # `deepcompile`: 1 or 0, whether to build with DeepCompile support
 
@@ -68,7 +68,9 @@ def main() -> None:
             torch_x_y = f"{torch_version.major}.{torch_version.minor}"
             cuda_versions = PYTORCH_CUDA_VERSIONS[torch_x_y]
             for cuda_version in cuda_versions:
-                cuda_arch_list = PYTORCH_CUDA_ARCH_LIST[(torch_x_y, cuda_version)]
+                cuda_version_parsed = Version(cuda_version)
+                cuda_x_y = f"{cuda_version_parsed.major}.{cuda_version_parsed.minor}"
+                cuda_arch_list = PYTORCH_CUDA_ARCH_LIST[(torch_x_y, cuda_x_y)]
 
                 row = {
                     "torch-version": str(torch_version),
@@ -92,8 +94,9 @@ def main() -> None:
         row["CI_TORCH_VERSION"] = row["torch-version"]
         row["CI_PYTHON_VERSION"] = row["python-version"]
 
-        # `MATRIX_CUDA_VERSION`: same as `cuda-version`, but with the dot removed
-        row["MATRIX_CUDA_VERSION"] = row["cuda-version"].replace(".", "")
+        # `MATRIX_CUDA_VERSION`: XY instead of X.Y
+        cuda_version = Version(row["cuda-version"])
+        row["MATRIX_CUDA_VERSION"] = f"{cuda_version.major}{cuda_version.minor}"
 
         # `MATRIX_TORCH_VERSION`: `torch-version`, but only X.Y, no patch
         torch_version = Version(row["torch-version"])
