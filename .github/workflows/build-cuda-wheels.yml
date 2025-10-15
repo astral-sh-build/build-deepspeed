@@ -22,6 +22,8 @@ jobs:
   plan-matrix:
     name: Plan DeepSpeed build matrix
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # for actions/checkout
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
