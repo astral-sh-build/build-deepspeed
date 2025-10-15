@@ -20,8 +20,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_wheels:
-    name: Build Wheel
+  plan-matrix:
+    name: Plan DeepSpeed build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
+
+      - name: Generate build matrix
+        id: generate-matrix
+        run: |
+          echo "matrix=$(uv run --script plan-matrix.py)" >> $GITHUB_OUTPUT
+
+  build-wheels:
+    name: Build Wheels
+    needs: [plan-matrix]
     runs-on: depot-ubuntu-latest-8
     env:
       DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.18.0' }}
@@ -30,122 +49,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # - torch-version: "2.5.1"
-          #   python-version: "3.9"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 0
-          # - torch-version: "2.5.1"
-          #   python-version: "3.10"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 0
-          # - torch-version: "2.5.1"
-          #   python-version: "3.11"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 0
-          # - torch-version: "2.5.1"
-          #   python-version: "3.12"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 0
-          # - torch-version: "2.6.0"
-          #   python-version: "3.9"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.9"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.10"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.10"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.11"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.11"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.12"
-          #   cuda-version: "12.4.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.6.0"
-          #   python-version: "3.12"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.9"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.9"
-          #   cuda-version: "12.8.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.10"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.10"
-          #   cuda-version: "12.8.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.11"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.11"
-          #   cuda-version: "12.8.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.12"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.12"
-          #   cuda-version: "12.8.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.13"
-          #   cuda-version: "12.6.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX"
-          #   deepcompile: 1
-          # - torch-version: "2.7.0"
-          #   python-version: "3.13"
-          #   cuda-version: "12.8.0"
-          #   arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-          #   deepcompile: 1
-          - torch-version: "2.9.0"
-            python-version: "3.13"
-            cuda-version: "12.8.0"
-            arch: "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX"
-            deepcompile: 1
+        include: ${{ fromJSON(needs.plan-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout Deepspeed
