@@ -9,20 +9,30 @@ import json
 
 from packaging.version import Version
 
+# Versions of PyTorch we actually want to include in the matrix.
 TORCH_VERSIONS = [
-    # "2.7.0",
+    "2.7.1",
     # "2.8.0",
     "2.9.0",
 ]
 
+# Versions of Python we actually want to include in the matrix.
 PYTHON_VERSIONS = [
     # "3.9",
     # "3.10",
     # "3.11",
     # "3.12",
     "3.13",
-    # "3.14",
+    "3.14",
 ]
+
+# Supported Python versions for each PyTorch version.
+# We use these to filter out the matrix.
+TORCH_PYTHON_SUPPORT = {
+    "2.7.1": ["3.9", "3.10", "3.11", "3.12", "3.13"],
+    "2.8.0": ["3.9", "3.10", "3.11", "3.12", "3.13"],
+    "2.9.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+}
 
 # Minimum and maximum CUDA versions for each PyTorch version.
 PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
@@ -49,6 +59,42 @@ PYTORCH_CUDA_ARCH_LIST: dict[tuple[str, str], str] = {
     ("2.9", "13.0"): "7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
 }
 
+AUDITWHEEL_BLANKET_EXCLUDES = [
+    "libcuda.so",
+    "libcuda.so.1",
+    "libc10.so",
+    "libc10_cuda.so",
+    "libtorch.so",
+    "libtorch_python.so",
+    "libtorch_cpu.so",
+    "libtorch_cuda.so",
+    "libtorch_cuda_cpp.so",
+    "libtorch_cuda_cu.so",
+    "libcufile_rdma.so",
+    "libcufile_rdma.so.1",
+    "libcufile.so.1",
+    "libcufile.so.0",
+    "libcufile.so",
+]
+
+AUDITWHEEL_CUDA_VERSION_EXCLUDES = {
+    "10": [
+        "libcurand.so.10",
+    ],
+    "11": [
+        "libcudart.so.11",
+        "libcudart.so.11.0",
+    ],
+    "12": [
+        "libcudart.so.12",
+        "libcudart.so.12.0",
+    ],
+    "13": [
+        "libcudart.so.13",
+        "libcudart.so.13.0",
+    ],
+}
+
 # Matrix exclusions.
 EXCLUSIONS = [
     # No exclusions yet.
@@ -56,7 +102,7 @@ EXCLUSIONS = [
 
 
 def main() -> None:
-    # Every matrix member is a 5-tuple of:
+    # Every matrix member is a primary 5-tuple of:
     # `torch-version`: the PyTorch version as "X.Y.Z", e.g. "2.7.0"
     # `python-version`: the Python version as "3.X", e.g. "3.10"
     # `cuda-version`: the CUDA version as "X.Y.Z", e.g. "11.8.0"
@@ -66,6 +112,9 @@ def main() -> None:
     rows = []
     for python_version in PYTHON_VERSIONS:
         for torch_version in TORCH_VERSIONS:
+            if python_version not in TORCH_PYTHON_SUPPORT[torch_version]:
+                continue
+
             torch_version = Version(torch_version)
             torch_x_y = f"{torch_version.major}.{torch_version.minor}"
             cuda_versions = PYTORCH_CUDA_VERSIONS[torch_x_y]
@@ -113,6 +162,17 @@ def main() -> None:
         # `MANYLINUX_CUDA_COMPAT_VERSION`: X-Y instead of X.Y.Z
         row["MANYLINUX_CUDA_COMPAT_VERSION"] = (
             f"{cuda_version.major}-{cuda_version.minor}"
+        )
+
+        # `CI_AUDITWHEEL_EXCLUDES`: `--exclude {lib}` for each lib that should
+        # be excluded when running `auditwheel repair`.
+        cuda_major = str(cuda_version.major)
+        auditwheel_excludes = (
+            AUDITWHEEL_BLANKET_EXCLUDES
+            + AUDITWHEEL_CUDA_VERSION_EXCLUDES.get(cuda_major, [])
+        )
+        row["CI_AUDITWHEEL_EXCLUDES"] = " ".join(
+            f"--exclude {lib}" for lib in auditwheel_excludes
         )
 
     print(json.dumps(rows))
