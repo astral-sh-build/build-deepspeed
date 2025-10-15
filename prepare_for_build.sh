@@ -16,12 +16,6 @@ fi
 
 DEEPSPEED_VERSION=$1
 
-# Ensure that the DeepSped version is supported.
-if [ ! -d "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}" ]; then
-    echo "Error: patches/${DEEPSPEED_VERSION} directory does not exist"
-    exit 1
-fi
-
 # We want to figure out the CUDA version to download pytorch
 # e.g. we can have system CUDA version being 11.7 but if torch==1.12 then we need to download the wheel from cu116
 # see https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
@@ -38,9 +32,16 @@ which python
 which uv
 
 # Apply patches.
-for patch in "${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}"/*.patch; do
-    patch -p1 -d ${ROOT} -i ${patch}
-done
+patch_dir="${ROOT}/build_scripts/patches/${DEEPSPEED_VERSION}"
+
+# Not all DeepSpeed versions need patches.
+if [ ! -d "${patch_dir}" ]; then
+    echo "Warning: nothing to patch: patches/${DEEPSPEED_VERSION} directory does not exist"
+else
+    for patch in "${patch_dir}"/*.patch; do
+        patch -p1 -d "${ROOT}" -i "${patch}"
+    done
+fi
 
 uv pip install hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
 
