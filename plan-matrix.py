@@ -105,11 +105,13 @@ def main() -> None:
         # `MATRIX_PYTHON_VERSION`: same as `python-version`, but with the dot removed
         row["MATRIX_PYTHON_VERSION"] = row["python-version"].replace(".", "")
 
-        # `MANYLINUX_CUDA_VERSION`: same as `cuda-version`
-        row["MANYLINUX_CUDA_VERSION"] = row["cuda-version"]
+        # `MANYLINUX_CUDA_VERSION`: X.Y instead of X.Y.Z
+        row["MANYLINUX_CUDA_VERSION"] = f"{cuda_version.major}.{cuda_version.minor}"
 
-        # `MANYLINUX_CUDA_COMPAT_VERSION`: `cuda-version`, but in X-Y format instead of X.Y
-        row["MANYLINUX_CUDA_COMPAT_VERSION"] = row["cuda-version"].replace(".", "-")
+        # `MANYLINUX_CUDA_COMPAT_VERSION`: X-Y instead of X.Y.Z
+        row["MANYLINUX_CUDA_COMPAT_VERSION"] = (
+            f"{cuda_version.major}-{cuda_version.minor}"
+        )
 
     print(json.dumps(rows))
 
