@@ -12,15 +12,15 @@ from packaging.version import Version
 # Versions of PyTorch we actually want to include in the matrix.
 TORCH_VERSIONS = [
     "2.7.1",
-    # "2.8.0",
+    "2.8.0",
     "2.9.0",
 ]
 
 # Versions of Python we actually want to include in the matrix.
 PYTHON_VERSIONS = [
-    # "3.9",
-    # "3.10",
-    # "3.11",
+    "3.9",
+    "3.10",
+    "3.11",
     "3.12",
     "3.13",
     # "3.14", # Not supported by DeepSpeed yet.
@@ -37,12 +37,14 @@ TORCH_PYTHON_SUPPORT = {
 # Minimum and maximum CUDA versions for each PyTorch version.
 PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
     "2.7": ("11.8", "12.8"),
+    "2.8": ("11.8", "12.8"),
     "2.9": ("12.6", "13.0"),
 }
 
 # Actual CUDA versions to build against for each PyTorch version.
 PYTORCH_CUDA_VERSIONS: dict[str, list[str]] = {
     "2.7": ["12.6.0", "12.8.0"],
+    "2.8": ["12.6.0", "12.8.0"],
     "2.9": ["12.6.0", "12.8.0", "13.0.0"],
 }
 
@@ -52,6 +54,8 @@ PYTORCH_CUDA_VERSIONS: dict[str, list[str]] = {
 PYTORCH_CUDA_ARCH_LIST: dict[tuple[str, str], str] = {
     ("2.7", "12.6"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX",
     ("2.7", "12.8"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
+    ("2.8", "12.6"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX",
+    ("2.8", "12.8"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
     ("2.9", "12.6"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0+PTX",
     ("2.9", "12.8"): "6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
     # Torch 2.9 with CUDA 13 requires 7.5+.
