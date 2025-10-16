@@ -95,7 +95,7 @@ jobs:
       - name: Install cibuildwheel
         run: |
           uv venv --python 3.13
-          uv pip install cibuildwheel
+          uv pip install cibuildwheel setuptools
 
       - name: Build wheels for Pytorch ${{ matrix.torch-version }}+cu${{ matrix.cuda-version }}
         run: |
