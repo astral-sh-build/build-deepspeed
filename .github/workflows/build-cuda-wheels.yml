@@ -90,6 +90,7 @@ jobs:
           echo "MANYLINUX_CUDA_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_VERSION }})" >> $GITHUB_ENV
           echo "MANYLINUX_CUDA_COMPAT_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_COMPAT_VERSION }})" >> $GITHUB_ENV
           echo "CI_AUDITWHEEL_EXCLUDES=$(echo ${{ matrix.CI_AUDITWHEEL_EXCLUDES }})" >> $GITHUB_ENV
+          echo "TORCH_CUDA_VERSION=$(echo ${{ matrix.TORCH_CUDA_VERSION }})" >> $GITHUB_ENV
 
       - name: Install cibuildwheel
         run: |
@@ -127,6 +128,7 @@ jobs:
             CI_TORCH_VERSION=${{ env.CI_TORCH_VERSION }}
             CI_PYTHON_VERSION=${{ env.CI_PYTHON_VERSION }}
             CI_AUDITWHEEL_EXCLUDES="${{ env.CI_AUDITWHEEL_EXCLUDES }}"
+            TORCH_CUDA_VERSION=${{ env.TORCH_CUDA_VERSION }}
             DS_ACCELERATOR=cuda
             TORCH_CUDA_ARCH_LIST="${{ matrix.cuda-arch-list }}"
             DS_BUILD_STRING="+cu${{ env.MATRIX_CUDA_VERSION }}torch${{ env.MATRIX_TORCH_VERSION }}"

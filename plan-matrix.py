@@ -63,6 +63,7 @@ PYTORCH_CUDA_ARCH_LIST: dict[tuple[str, str], str] = {
     ("2.9", "13.0"): "7.5;8.0;8.6;8.9;9.0;10.0;12.0+PTX",
 }
 
+
 AUDITWHEEL_BLANKET_EXCLUDES = [
     "libcuda.so",
     "libcuda.so.1",
@@ -175,6 +176,20 @@ def main() -> None:
         )
         row["CI_AUDITWHEEL_EXCLUDES"] = " ".join(
             f"--exclude {lib}" for lib in auditwheel_excludes
+        )
+
+        # TORCH_CUDA_VERSION: the CUDA version to download PyTorch for.
+        # This is the CUDA version clamped to the min/max supported by the
+        # given PyTorch version.
+        # e.g. we can have system CUDA version being 11.7 but if torch==1.12 then we need to download the wheel from cu116
+        # see https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
+        torch_x_y = f"{torch_version.major}.{torch_version.minor}"
+        minv, maxv = PYTORCH_CUDA_RANGES[torch_x_y]
+        torch_cuda_version = max(
+            min(Version(row["cuda-version"]), Version(maxv)), Version(minv)
+        )
+        row["TORCH_CUDA_VERSION"] = (
+            f"{torch_cuda_version.major}{torch_cuda_version.minor}"
         )
 
     print(json.dumps(rows))
