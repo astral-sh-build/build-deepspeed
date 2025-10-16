@@ -75,12 +75,10 @@ AUDITWHEEL_BLANKET_EXCLUDES = [
     "libcufile.so.1",
     "libcufile.so.0",
     "libcufile.so",
+    "libcurand.so.10",
 ]
 
 AUDITWHEEL_CUDA_VERSION_EXCLUDES = {
-    "10": [
-        "libcurand.so.10",
-    ],
     "11": [
         "libcudart.so.11",
         "libcudart.so.11.0",
