@@ -43,9 +43,9 @@ PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
 
 # Actual CUDA versions to build against for each PyTorch version.
 PYTORCH_CUDA_VERSIONS: dict[str, list[str]] = {
-    "2.7": ["12.6.0", "12.8.0"],
-    "2.8": ["12.6.0", "12.8.0"],
-    "2.9": ["12.6.0", "12.8.0", "13.0.0"],
+    "2.7": ["12.8.0"],
+    "2.8": ["12.8.0"],
+    "2.9": ["13.0.0"],
 }
 
 # CUDA architectures to build against for each (PyTorch version, CUDA version) pair.
