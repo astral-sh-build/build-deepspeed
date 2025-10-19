@@ -20,6 +20,7 @@ jobs:
   build_wheels:
     name: Build Wheel
     runs-on: depot-ubuntu-latest-8
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     env:
       DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.4' }}
       CUTLASS_VERSION: v3.8.0
