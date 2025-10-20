@@ -13,6 +13,8 @@ on:
         required: true
         default: "v0.18.0"
         type: string
+  release:
+    types: [created]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}-${{ github.event.pull_request.number || github.sha }}-${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.17.4' }}
@@ -34,6 +36,8 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
+        with:
+          enable-cache: false
 
       - name: Generate build matrix
         id: generate-matrix
@@ -46,7 +50,6 @@ jobs:
     runs-on: depot-ubuntu-latest-8
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     env:
-      DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.18.0' }}
       CUTLASS_VERSION: v3.8.0
 
     permissions:
@@ -57,11 +60,33 @@ jobs:
         include: ${{ fromJSON(needs.plan-matrix.outputs.matrix) }}
 
     steps:
+      - name: Determine DeepSpeed version
+        id: deepspeed-version
+        run: |
+          # Extract DeepSpeed version from tag. Tags can be either:
+          # - v0.18.0 (legacy format; maps directly to DeepSpeed version)
+          # - v0.18.0-r1 (new format; strip -rN suffix to get DeepSpeed version)
+          if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
+            TAG="${GITHUB_REF_NAME}"
+            # Remove -rN suffix if present
+            DEEPSPEED_VERSION="${TAG%-r*}"
+          elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
+            DEEPSPEED_VERSION="${INPUTS_DEEPSPEED_VERSION}"
+          else
+            DEEPSPEED_VERSION="v0.18.0"
+          fi
+          echo "version=${DEEPSPEED_VERSION}" >> $GITHUB_OUTPUT
+          echo "Using DeepSpeed version: ${DEEPSPEED_VERSION}"
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          INPUTS_DEEPSPEED_VERSION: ${{ inputs.deepspeed_version }}
+
       - name: Checkout Deepspeed
         uses: actions/checkout@v4
         with:
           repository: deepspeedai/DeepSpeed
-          ref: ${{ env.DEEPSPEED_VERSION }}
+          ref: ${{ steps.deepspeed-version.outputs.version }}
           persist-credentials: false
 
       - name: Checkout cutlass repo
@@ -80,6 +105,8 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca # v6
+        with:
+          enable-cache: false
 
       - name: Set CUDA and PyTorch versions ${{ matrix.torch-version }}+cu${{ matrix.cuda-version }}
         run: |
@@ -112,7 +139,7 @@ jobs:
             (yum install -y cuda-driver-devel-${{ env.MANYLINUX_CUDA_COMPAT_VERSION }} || true) &&
             (yum install -y glibc glibc-devel || apt-get install -y libc6-dev || apk add --update --no-cache musl-dev || true) &&
             (yum install -y libffi-devel || apt-get install -y libffi-devel || apk add --update --no-cache libffi-devel || true) &&
-            bash build_scripts/prepare_for_build.sh ${{ env.DEEPSPEED_VERSION }}
+            bash build_scripts/prepare_for_build.sh ${{ steps.deepspeed-version.outputs.version }}
           CIBW_ENVIRONMENT: >
             PATH=$PATH:/root/.local/bin
             CUDA_HOME="/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}"
@@ -151,6 +178,16 @@ jobs:
           ls dist
 
       - uses: actions/upload-artifact@v4
+        if: github.event_name != 'release'
         with:
           name: ${{env.wheel_name}}
           path: dist/${{env.wheel_name}}
+          if-no-files-found: error
+
+      - name: Upload wheels to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
+        with:
+          files: ./dist/*.whl
+          tag_name: ${{ github.ref_name }}
+          append_body: true
