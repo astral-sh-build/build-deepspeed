@@ -22,6 +22,7 @@ jobs:
   plan-matrix:
     name: Plan DeepSpeed build matrix
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     permissions:
       contents: read # for actions/checkout
     outputs:
@@ -43,6 +44,7 @@ jobs:
     name: Build Wheels
     needs: [plan-matrix]
     runs-on: depot-ubuntu-latest-8
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     env:
       DEEPSPEED_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.deepspeed_version || 'v0.18.0' }}
       CUTLASS_VERSION: v3.8.0
