@@ -47,7 +47,7 @@ jobs:
   build-wheels:
     name: Build Wheels
     needs: [plan-matrix]
-    runs-on: depot-ubuntu-latest-8
+    runs-on: ${{ matrix.RUNNER }}
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-build') }}
     env:
       CUTLASS_VERSION: v3.8.0
@@ -118,8 +118,11 @@ jobs:
           echo "MATRIX_PYTHON_VERSION=$(echo ${{ matrix.MATRIX_PYTHON_VERSION }})" >> $GITHUB_ENV
           echo "MANYLINUX_CUDA_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_VERSION }})" >> $GITHUB_ENV
           echo "MANYLINUX_CUDA_COMPAT_VERSION=$(echo ${{ matrix.MANYLINUX_CUDA_COMPAT_VERSION }})" >> $GITHUB_ENV
+          echo "MANYLINUX_GLIBC_VERSION=$(echo ${{ matrix.MANYLINUX_GLIBC_VERSION }})" >> $GITHUB_ENV
           echo "CI_AUDITWHEEL_EXCLUDES=$(echo ${{ matrix.CI_AUDITWHEEL_EXCLUDES }})" >> $GITHUB_ENV
           echo "TORCH_CUDA_VERSION=$(echo ${{ matrix.TORCH_CUDA_VERSION }})" >> $GITHUB_ENV
+          # Avoid `echo` quoting to avoid interpreting the semicolon-delimited list as separate commands.
+          echo "TORCH_CUDA_ARCH_LIST=\"${{ matrix.TORCH_CUDA_ARCH_LIST }}\"" >> $GITHUB_ENV
 
       - name: Install cibuildwheel
         run: |
@@ -130,8 +133,10 @@ jobs:
         run: |
           .venv/bin/cibuildwheel --output-dir dist
         env:
+          CIBW_ARCHS_LINUX: ${{ matrix.target-arch }}
           CIBW_BUILD: cp${{ env.MATRIX_PYTHON_VERSION }}-*64
           CIBW_MANYLINUX_X86_64_IMAGE: pytorch/manylinux2_28-builder:cuda${{ env.MANYLINUX_CUDA_VERSION }}
+          CIBW_MANYLINUX_AARCH64_IMAGE: pytorch/manylinuxaarch64-builder:cuda${{ env.MANYLINUX_CUDA_VERSION }}
           CIBW_BEFORE_ALL: >
             curl -LsSf https://astral.sh/uv/install.sh | sh
           CIBW_BEFORE_BUILD_LINUX: >
@@ -144,12 +149,12 @@ jobs:
             PATH=$PATH:/root/.local/bin
             CUDA_HOME="/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}"
             LIBRARY_PATH="/usr/lib64"
-            LD_LIBRARY_PATH="/usr/lib64"
-            LDFLAGS="-ldl -L/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}/targets/x86_64-linux/lib/stubs"
+            LD_LIBRARY_PATH="/usr/lib64:/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}/lib64:/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}/targets/${{ matrix.target-arch }}-linux/lib:/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}/extras/CUPTI/lib64"
+            LDFLAGS="-ldl -L/usr/local/cuda-${{ env.MANYLINUX_CUDA_VERSION }}/targets/${{ matrix.target-arch }}-linux/lib/stubs"
             CCL_ROOT="/project/oneCCL/build/_install"
             CPATH="/project/oneCCL/build/_install/include"
             CUTLASS_PATH=/project/cutlass
-            AUDITWHEEL_PLAT="manylinux_2_28_$(uname -m)"
+            AUDITWHEEL_PLAT="manylinux_${{ env.MANYLINUX_GLIBC_VERSION }}_$(uname -m)"
             MATRIX_CUDA_VERSION=${{ env.MATRIX_CUDA_VERSION }}
             MATRIX_TORCH_VERSION=${{ env.MATRIX_TORCH_VERSION }}
             MATRIX_PYTHON_VERSION=${{ env.MATRIX_PYTHON_VERSION }}
@@ -158,10 +163,10 @@ jobs:
             CI_PYTHON_VERSION=${{ env.CI_PYTHON_VERSION }}
             CI_AUDITWHEEL_EXCLUDES="${{ env.CI_AUDITWHEEL_EXCLUDES }}"
             TORCH_CUDA_VERSION=${{ env.TORCH_CUDA_VERSION }}
+            TORCH_CUDA_ARCH_LIST=${{ env.TORCH_CUDA_ARCH_LIST }}
             DS_ACCELERATOR=cuda
-            TORCH_CUDA_ARCH_LIST="${{ matrix.cuda-arch-list }}"
             DS_BUILD_STRING="+cu${{ env.MATRIX_CUDA_VERSION }}torch${{ env.MATRIX_TORCH_VERSION }}"
-            CXX11_ABI=${{ matrix.cxx11abi }}
+            CXX11_ABI=${{ matrix.cxx11-abi }}
             DS_BUILD_OPS=1
             DS_BUILD_DEEP_COMPILE=${{ matrix.deepcompile }}
             DS_BUILD_EVOFORMER_ATTN=0
