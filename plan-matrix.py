@@ -69,9 +69,9 @@ TORCH_CUDA_ARCH_LIST = {
 # The glibc version to use for each PyTorch version, for manylinux builds.
 # See: https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
 TORCH_GLIBC_VERSION: dict[str, str] = {
-    "2.7": "2_28",
-    "2.8": "2_28",
-    "2.9": "2_28",
+    "2.7": "2_27",
+    "2.8": "2_27",
+    "2.9": "2_27",
 }
 
 # CXX11 ABI configuration for each PyTorch version
