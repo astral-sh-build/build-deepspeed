@@ -8,11 +8,11 @@ index 67befe3d..881b1a4e 100755
  
 +# Pin the PyTorch version.
 +index = install_requires.index("torch")
-+install_requires[index] = f"torch=={TORCH_MINOR}.{TORCH_MINOR}.*"
++install_requires[index] = f"torch=={TORCH_MAJOR}.{TORCH_MINOR}.*"
 +for requirements in extras_require:
 +    try:
 +        index = requirements.index("torch")
-+        requirements[index] = f"torch=={TORCH_MINOR}.{TORCH_MINOR}.*"
++        requirements[index] = f"torch=={TORCH_MAJOR}.{TORCH_MINOR}.*"
 +    except ValueError:
 +        pass
 +
