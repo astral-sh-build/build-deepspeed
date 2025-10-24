@@ -49,20 +49,28 @@ PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
 }
 
 # Actual CUDA versions to build against for each PyTorch version.
-PYTORCH_CUDA_VERSIONS: dict[str, list[str]] = {
-    "2.7": ["12.8"],
-    "2.8": ["12.9"],
-    "2.9": ["12.9", "13.0"],
+PYTORCH_CUDA_VERSIONS: dict[tuple[str, str], list[str]] = {
+    ("2.7", "x86_64"): ["12.6", "12.8"],
+    ("2.7", "aarch64"): ["12.8"],
+    ("2.8", "x86_64"): ["12.6", "12.8", "12.9"],
+    ("2.8", "aarch64"): ["12.9"],
+    ("2.9", "x86_64"): ["12.6", "12.8", "12.9", "13.0"],
+    ("2.9", "aarch64"): ["12.6", "12.8", "12.9", "13.0"],
 }
 
 # CUDA architectures to build against for each PyTorch version.
 TORCH_CUDA_ARCH_LIST = {
     # https://github.com/pytorch/pytorch/blob/134179474539648ba7dee1317959529fbd0e7f89/.ci/manywheel/build_cuda.sh#L55
-    ("2.7", "12.8"): "7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.7", "12.6"): "7.0;7.5;8.0;8.6;9.0+PTX",
+    ("2.7", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     # https://github.com/pytorch/pytorch/blob/ba56102387ef21a3b04b357e5b183d48f0afefc7/.ci/manywheel/build_cuda.sh#L56
-    ("2.8", "12.9"): "7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.8", "12.6"): "7.0;7.5;8.0;8.6;9.0+PTX",
+    ("2.8", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.8", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     # https://github.com/pytorch/pytorch/blob/0fabc3ba44823f257e70ce397d989c8de5e362c1/.ci/manywheel/build_cuda.sh#L56
-    ("2.9", "12.9"): "7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.9", "12.6"): "7.0;7.5;8.0;8.6;9.0+PTX",
+    ("2.9", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.9", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     ("2.9", "13.0"): "7.5;8.0;8.6;9.0;10.0;11.0;12.0+PTX",
 }
 
@@ -72,13 +80,6 @@ TORCH_GLIBC_VERSION: dict[str, str] = {
     "2.7": "2_27",
     "2.8": "2_27",
     "2.9": "2_27",
-}
-
-# CXX11 ABI configuration for each PyTorch version
-TORCH_CXX11_ABI = {
-    "2.7": ["TRUE"],
-    "2.8": ["TRUE"],
-    "2.9": ["TRUE"],
 }
 
 AUDITWHEEL_BLANKET_EXCLUDES = [
@@ -142,24 +143,34 @@ def main() -> None:
                 if python_version not in PYTHON_VERSIONS:
                     continue
 
-                cuda_versions = PYTORCH_CUDA_VERSIONS[torch_x_y]
+                cuda_versions = PYTORCH_CUDA_VERSIONS[(torch_x_y, target_arch)]
                 for cuda_version in cuda_versions:
-                    for cxx11_abi in TORCH_CXX11_ABI[torch_x_y]:
-                        row = {
-                            "target-arch": target_arch,
-                            "torch-version": str(torch_version_parsed),
-                            "python-version": python_version,
-                            "cuda-version": cuda_version,
-                            "cxx11-abi": cxx11_abi,
-                            # DeepCompile appears to require Torch 2.5 or newer,
-                            # but our original matrix only enabled in on 2.6 and newer.
-                            # Follow that here.
-                            # See: https://github.com/deepspeedai/DeepSpeed/pull/7154
-                            "deepcompile": int(torch_version_parsed >= Version("2.6")),
-                        }
+                    cuda_version_parsed = Version(cuda_version)
 
-                        if row not in EXCLUSIONS:
-                            rows.append(row)
+                    # The CXX11 ABI became the default in PyTorch 2.7.0, but was also used in
+                    # PyTorch 2.6.0 (but _only_ for the CUDA 12.6 builds).
+                    #
+                    # See: https://pytorch.org/blog/pytorch2-6/
+                    cxx11_abi = torch_version_parsed >= Version("2.7.0") or (
+                        torch_version_parsed == Version("2.6.0")
+                        and cuda_version_parsed >= Version("12.6")
+                    )
+
+                    row = {
+                        "target-arch": target_arch,
+                        "torch-version": str(torch_version_parsed),
+                        "python-version": python_version,
+                        "cuda-version": cuda_version,
+                        "cxx11-abi": "TRUE" if cxx11_abi else "FALSE",
+                        # DeepCompile appears to require Torch 2.5 or newer,
+                        # but our original matrix only enabled in on 2.6 and newer.
+                        # Follow that here.
+                        # See: https://github.com/deepspeedai/DeepSpeed/pull/7154
+                        "deepcompile": int(torch_version_parsed >= Version("2.6")),
+                    }
+
+                    if row not in EXCLUSIONS:
+                        rows.append(row)
 
     # Transform each row to add various nice-to-have representations of fields.
     for row in rows:
@@ -201,20 +212,6 @@ def main() -> None:
         )
         row["CI_AUDITWHEEL_EXCLUDES"] = " ".join(
             f"--exclude {lib}" for lib in auditwheel_excludes
-        )
-
-        # TORCH_CUDA_VERSION: the CUDA version to download PyTorch for.
-        # This is the CUDA version clamped to the min/max supported by the
-        # given PyTorch version.
-        # e.g. we can have system CUDA version being 11.7 but if torch==1.12 then we need to download the wheel from cu116
-        # see https://github.com/pytorch/pytorch/blob/main/RELEASE.md#release-compatibility-matrix
-        torch_x_y = f"{torch_version.major}.{torch_version.minor}"
-        minv, maxv = PYTORCH_CUDA_RANGES[torch_x_y]
-        torch_cuda_version = max(
-            min(Version(row["cuda-version"]), Version(maxv)), Version(minv)
-        )
-        row["TORCH_CUDA_VERSION"] = (
-            f"{torch_cuda_version.major}{torch_cuda_version.minor}"
         )
 
         row["TORCH_CUDA_ARCH_LIST"] = TORCH_CUDA_ARCH_LIST[
