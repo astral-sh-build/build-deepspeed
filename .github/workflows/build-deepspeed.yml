@@ -163,8 +163,6 @@ jobs:
             CI_AUDITWHEEL_EXCLUDES="${{ env.CI_AUDITWHEEL_EXCLUDES }}"
             TORCH_CUDA_ARCH_LIST=${{ env.TORCH_CUDA_ARCH_LIST }}
             DS_ACCELERATOR=cuda
-            DS_BUILD_STRING="+cu${{ env.MATRIX_CUDA_VERSION }}torch${{ env.MATRIX_TORCH_VERSION }}"
-            CXX11_ABI=${{ matrix.cxx11-abi }}
             DS_BUILD_OPS=1
             DS_BUILD_DEEP_COMPILE=${{ matrix.deepcompile }}
             DS_BUILD_EVOFORMER_ATTN=0
@@ -177,6 +175,14 @@ jobs:
       - name: Log Built Wheels
         run: |
           wheel_name=$(ls dist/*whl | xargs -n 1 basename)
+          echo "wheel_name=${wheel_name}" >> $GITHUB_ENV
+          ls dist
+
+      - name: Rename wheel
+        run: |
+          tmpname=cu${{ matrix.cuda-version }}torch${{ matrix.torch-version }}cxx11abi${{ matrix.cxx11-abi }}
+          wheel_name=$(ls dist/*whl | xargs -n 1 basename | sed "s/+[^-]*-/-/" | sed "s/-/+$tmpname-/2")
+          ls dist/*whl |xargs -I {} mv {} dist/${wheel_name}
           echo "wheel_name=${wheel_name}" >> $GITHUB_ENV
           ls dist
 
