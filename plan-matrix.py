@@ -35,9 +35,9 @@ PYTHON_VERSIONS = [
 # Supported Python versions for each PyTorch version.
 # We use these to filter out the matrix.
 TORCH_PYTHON_SUPPORT = {
-    "2.7.1": ["3.9", "3.10", "3.11", "3.12", "3.13"],
-    "2.8.0": ["3.9", "3.10", "3.11", "3.12", "3.13"],
-    "2.9.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.7.1": ["3.9"],  # , "3.10", "3.11", "3.12", "3.13"],
+    "2.8.0": ["3.9"],  # , "3.10", "3.11", "3.12", "3.13"],
+    "2.9.0": ["3.10"],  # , "3.11", "3.12", "3.13", "3.14"],
 }
 
 # Minimum and maximum CUDA versions for each PyTorch version.
@@ -69,8 +69,8 @@ TORCH_CUDA_ARCH_LIST = {
     ("2.8", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     # https://github.com/pytorch/pytorch/blob/0fabc3ba44823f257e70ce397d989c8de5e362c1/.ci/manywheel/build_cuda.sh#L56
     ("2.9", "12.6"): "7.0;7.5;8.0;8.6;9.0+PTX",
-    ("2.9", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
-    ("2.9", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.9", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;10.1;12.0+PTX",
+    ("2.9", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;10.1;12.0+PTX",
     ("2.9", "13.0"): "7.5;8.0;8.6;9.0;10.0;11.0;12.0+PTX",
 }
 
@@ -156,21 +156,34 @@ def main() -> None:
                         and cuda_version_parsed >= Version("12.6")
                     )
 
-                    row = {
-                        "target-arch": target_arch,
-                        "torch-version": str(torch_version_parsed),
-                        "python-version": python_version,
-                        "cuda-version": cuda_version,
-                        "cxx11-abi": "TRUE" if cxx11_abi else "FALSE",
-                        # DeepCompile appears to require Torch 2.5 or newer,
-                        # but our original matrix only enabled in on 2.6 and newer.
-                        # Follow that here.
-                        # See: https://github.com/deepspeedai/DeepSpeed/pull/7154
-                        "deepcompile": int(torch_version_parsed >= Version("2.6")),
-                    }
+                    # Get the architecture list for this torch/cuda combination
+                    arch_list_str = TORCH_CUDA_ARCH_LIST[
+                        (
+                            f"{torch_version_parsed.major}.{torch_version_parsed.minor}",
+                            f"{cuda_version_parsed.major}.{cuda_version_parsed.minor}",
+                        )
+                    ]
+                    # Split the semicolon-separated list into individual compute codes
+                    arch_list = arch_list_str.split(";")
 
-                    if row not in EXCLUSIONS:
-                        rows.append(row)
+                    # Create one row per compute code
+                    for compute_code in arch_list:
+                        row = {
+                            "target-arch": target_arch,
+                            "torch-version": str(torch_version_parsed),
+                            "python-version": python_version,
+                            "cuda-version": cuda_version,
+                            "cxx11-abi": "TRUE" if cxx11_abi else "FALSE",
+                            # DeepCompile appears to require Torch 2.5 or newer,
+                            # but our original matrix only enabled in on 2.6 and newer.
+                            # Follow that here.
+                            # See: https://github.com/deepspeedai/DeepSpeed/pull/7154
+                            "deepcompile": int(torch_version_parsed >= Version("2.6")),
+                            "compute-code": compute_code,
+                        }
+
+                        if row not in EXCLUSIONS:
+                            rows.append(row)
 
     # Transform each row to add various nice-to-have representations of fields.
     for row in rows:
@@ -214,12 +227,8 @@ def main() -> None:
             f"--exclude {lib}" for lib in auditwheel_excludes
         )
 
-        row["TORCH_CUDA_ARCH_LIST"] = TORCH_CUDA_ARCH_LIST[
-            (
-                f"{torch_version.major}.{torch_version.minor}",
-                f"{cuda_version.major}.{cuda_version.minor}",
-            )
-        ]
+        # Use the individual compute code for this row
+        row["TORCH_CUDA_ARCH_LIST"] = row["compute-code"]
 
         # RUNNER: the GitHub Actions runner to use.
         if row["target-arch"] == "x86_64":
