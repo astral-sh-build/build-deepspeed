@@ -11,7 +11,7 @@ on:
       deepspeed_version:
         description: "DeepSpeed version"
         required: true
-        default: "v0.18.1"
+        default: "v0.18.2"
         type: string
   release:
     types: [created]
@@ -64,8 +64,8 @@ jobs:
         id: deepspeed-version
         run: |
           # Extract DeepSpeed version from tag. Tags can be either:
-          # - v0.18.1 (legacy format; maps directly to DeepSpeed version)
-          # - v0.18.1-r1 (new format; strip -rN suffix to get DeepSpeed version)
+          # - v0.18.2 (legacy format; maps directly to DeepSpeed version)
+          # - v0.18.2-r1 (new format; strip -rN suffix to get DeepSpeed version)
           if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
             TAG="${GITHUB_REF_NAME}"
             # Remove -rN suffix if present
@@ -73,7 +73,7 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             DEEPSPEED_VERSION="${INPUTS_DEEPSPEED_VERSION}"
           else
-            DEEPSPEED_VERSION="v0.18.1"
+            DEEPSPEED_VERSION="v0.18.2"
           fi
           echo "version=${DEEPSPEED_VERSION}" >> $GITHUB_OUTPUT
           echo "Using DeepSpeed version: ${DEEPSPEED_VERSION}"
