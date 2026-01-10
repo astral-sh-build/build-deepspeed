@@ -30,7 +30,7 @@ jobs:
     outputs:
       matrix: ${{ steps.generate-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
 
@@ -83,14 +83,14 @@ jobs:
           INPUTS_DEEPSPEED_VERSION: ${{ inputs.deepspeed_version }}
 
       - name: Checkout Deepspeed
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: deepspeedai/DeepSpeed
           ref: ${{ steps.deepspeed-version.outputs.version }}
           persist-credentials: false
 
       - name: Checkout cutlass repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           repository: NVIDIA/cutlass
           ref: ${{ env.CUTLASS_VERSION }}
@@ -98,7 +98,7 @@ jobs:
           persist-credentials: false
 
       - name: Checkout utils
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           path: build_scripts
           persist-credentials: false
@@ -186,7 +186,7 @@ jobs:
           echo "wheel_name=${wheel_name}" >> $GITHUB_ENV
           ls dist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: github.event_name != 'release'
         with:
           name: ${{env.wheel_name}}
