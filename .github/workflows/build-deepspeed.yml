@@ -11,7 +11,7 @@ on:
       deepspeed_version:
         description: "DeepSpeed version"
         required: true
-        default: "v0.18.3"
+        default: "v0.18.4"
         type: string
   release:
     types: [created]
@@ -73,7 +73,7 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             DEEPSPEED_VERSION="${INPUTS_DEEPSPEED_VERSION}"
           else
-            DEEPSPEED_VERSION="v0.18.3"
+            DEEPSPEED_VERSION="v0.18.4"
           fi
           echo "version=${DEEPSPEED_VERSION}" >> $GITHUB_OUTPUT
           echo "Using DeepSpeed version: ${DEEPSPEED_VERSION}"
