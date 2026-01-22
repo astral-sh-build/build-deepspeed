@@ -24,13 +24,13 @@ ARCH_TORCH_PAIRS = {
 }
 
 # Versions of Python we actually want to include in the matrix.
+# TODO(charlie): DeepSpeed doesn't yet support Python 3.14 (inference v2 import fails).
 PYTHON_VERSIONS = [
     "3.9",
     "3.10",
     "3.11",
     "3.12",
     "3.13",
-    "3.14",
 ]
 
 # Supported Python versions for each PyTorch version.
@@ -38,8 +38,8 @@ PYTHON_VERSIONS = [
 TORCH_PYTHON_SUPPORT = {
     "2.7.1": ["3.9", "3.10", "3.11", "3.12", "3.13"],
     "2.8.0": ["3.9", "3.10", "3.11", "3.12", "3.13"],
-    "2.9.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
-    "2.10.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.9.0": ["3.10", "3.11", "3.12", "3.13"],
+    "2.10.0": ["3.10", "3.11", "3.12", "3.13"],
 }
 
 # Minimum and maximum CUDA versions for each PyTorch version.
