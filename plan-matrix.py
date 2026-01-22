@@ -11,18 +11,16 @@ from packaging.version import Version
 
 # Versions of PyTorch we actually want to include in the matrix.
 TORCH_VERSIONS = [
-    # "2.7.1",
-    # "2.8.0",
-    # "2.9.0",
+    "2.7.1",
+    "2.8.0",
+    "2.9.0",
     "2.10.0",
 ]
 
 ARCH_TORCH_PAIRS = {
-    # "x86_64": ["2.7.1", "2.8.0", "2.9.0"],
-    "x86_64": ["2.10.0"],
+    "x86_64": ["2.7.1", "2.8.0", "2.9.0", "2.10.0"],
     # TODO(charlie): Depends on creating an aarch64 wheel for `deepspeed-kernels`.
-    # "aarch64": ["2.7.1", "2.8.0", "2.9.0"],
-    "aarch64": ["2.10.0"],
+    # "aarch64": ["2.7.1", "2.8.0", "2.9.0", "2.10.0"],
 }
 
 # Versions of Python we actually want to include in the matrix.
