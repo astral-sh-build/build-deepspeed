@@ -32,13 +32,3 @@ else
         patch -p1 -d "${ROOT}" -i "${patch}"
     done
 fi
-
-uv pip install setuptools hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
-
-# TODO(charlie): The PyTorch CUDA 12.9 index is missing cuda-bindings==12.9.4, but PyTorch 2.10 depends on it.
-if [ "${MATRIX_CUDA_VERSION}" = "129" ] && [ "${MATRIX_TORCH_VERSION}" = "2.10" ]; then
-    uv pip install cuda-bindings==12.9.4
-fi
-
-echo "install torch==${CI_TORCH_VERSION}+cu${MATRIX_CUDA_VERSION}"
-uv pip install --no-cache-dir --index-strategy unsafe-first-match torch==${CI_TORCH_VERSION} --index-url https://download.pytorch.org/whl/cu${MATRIX_CUDA_VERSION}
