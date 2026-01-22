@@ -32,8 +32,3 @@ else
         patch -p1 -d "${ROOT}" -i "${patch}"
     done
 fi
-
-uv pip install setuptools hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton
-
-echo "install torch==${CI_TORCH_VERSION}+cu${MATRIX_CUDA_VERSION}"
-uv pip install --no-cache-dir torch==${CI_TORCH_VERSION} --index-url https://download.pytorch.org/whl/cu${MATRIX_CUDA_VERSION}
