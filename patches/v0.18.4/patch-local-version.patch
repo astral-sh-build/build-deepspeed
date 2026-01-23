@@ -1,0 +1,17 @@
+diff --git a/setup.py b/setup.py
+index 1234567..abcdefg 100644
+--- a/setup.py
++++ b/setup.py
+@@ -169,6 +169,12 @@ else:
+     # Source installation
+     version_str += f'+{git_hash}'
+
++# Auto-generate local version from CUDA and PyTorch versions.
++import torch
++cuda_version = torch.version.cuda
++torch_version = ".".join(torch.__version__.split(".")[:2])
++if cuda_version:
++    version_str = version_str.split('+')[0] + f"+cu.{cuda_version}.torch.{torch_version}"
+
+ # Parse the command line to determine the build configuration and how to
+ # make install_requires properly handle torch.
