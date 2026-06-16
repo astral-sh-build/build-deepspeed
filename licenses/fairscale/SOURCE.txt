@@ -1,0 +1,5 @@
+DeepSpeed's deepspeed/moe/sharded_moe.py states that it is adapted from
+fairscale/nn/moe/moe_layer.py and fairscale/nn/moe/top2gate.py at commit
+34df606902a240567a0d898037ece55c2f1336cf.
+
+Source project: https://github.com/facebookresearch/fairscale

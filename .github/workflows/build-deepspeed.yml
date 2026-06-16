@@ -184,7 +184,7 @@ jobs:
           CIBW_TEST_COMMAND: (DS_ACCELERATOR=cuda ds_report || true) && (DS_ACCELERATOR=cpu ds_report || true)
           CIBW_BUILD_FRONTEND: "build[uv]; args: --no-isolation"
 
-      - name: Embed SBOM into wheel
+      - name: Embed metadata into wheel
         run: |
           for wheel in dist/*.whl; do
             uv run --script build_scripts/embed_patches.py "$wheel" "build_scripts/patches/${DEEPSPEED_VERSION}" \
@@ -192,7 +192,17 @@ jobs:
               --source-tag "${DEEPSPEED_VERSION}" \
               --source-commit "${SOURCE_COMMIT}" \
               --build-repo "https://github.com/astral-sh-build/build-deepspeed" \
-              --build-commit "${BUILD_COMMIT}"
+              --build-commit "${BUILD_COMMIT}" \
+              --license-expression "Apache-2.0 AND BSD-3-Clause AND MIT" \
+              --license-file "LICENSE:LICENSE" \
+              --license-file "build_scripts/licenses/nvidia-apex/LICENSE.txt:third-party/nvidia-apex/LICENSE.txt" \
+              --license-file "build_scripts/licenses/nvidia-apex/SOURCE.txt:third-party/nvidia-apex/SOURCE.txt" \
+              --license-file "build_scripts/licenses/fairscale/LICENSE.txt:third-party/fairscale/LICENSE.txt" \
+              --license-file "build_scripts/licenses/fairscale/SOURCE.txt:third-party/fairscale/SOURCE.txt" \
+              --license-file "build_scripts/licenses/tecorigin-sdaa/BSD-3-Clause.txt:third-party/tecorigin-sdaa/BSD-3-Clause.txt" \
+              --license-file "build_scripts/licenses/tecorigin-sdaa/SOURCE.txt:third-party/tecorigin-sdaa/SOURCE.txt" \
+              --license-file "build_scripts/licenses/muon/MIT.txt:third-party/muon/MIT.txt" \
+              --license-file "build_scripts/licenses/muon/SOURCE.txt:third-party/muon/SOURCE.txt"
           done
         env:
           DEEPSPEED_VERSION: ${{ steps.deepspeed-version.outputs.version }}
