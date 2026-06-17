@@ -1,0 +1,4 @@
+DeepSpeed includes deepspeed/runtime/zero/muon/original_muon.py, which carries
+the MIT license text for material copyright 2024 Keller Jordan.
+
+Source project: https://github.com/deepspeedai/DeepSpeed

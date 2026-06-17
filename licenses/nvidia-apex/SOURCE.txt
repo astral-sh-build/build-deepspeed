@@ -1,0 +1,5 @@
+DeepSpeed includes code adapted from NVIDIA/apex optimizer and multi-tensor
+implementations. DeepSpeed source comments reference NVIDIA/apex commits
+a109f85, 6bd01c4, and 855808f3fc268e9715c572eca33a3ff1117b1a4c.
+
+Source project: https://github.com/NVIDIA/apex

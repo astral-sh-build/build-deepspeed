@@ -1,0 +1,5 @@
+DeepSpeed includes Tecorigin SDAA support files that carry a BSD 3-Clause
+license notice, including accelerator/sdaa_accelerator.py and files under
+op_builder/sdaa/.
+
+Source project: https://github.com/deepspeedai/DeepSpeed
