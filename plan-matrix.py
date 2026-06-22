@@ -12,11 +12,11 @@ from packaging.version import Version
 
 # Versions of PyTorch we actually want to include in the matrix.
 TORCH_VERSIONS = [
-    "2.7.1",
-    "2.8.0",
-    "2.9.1",
-    "2.10.0",
-    "2.11.0",
+    # "2.7.1",
+    # "2.8.0",
+    # "2.9.1",
+    # "2.10.0",
+    # "2.11.0",
     "2.12.1",
 ]
 
@@ -263,8 +263,8 @@ def main() -> None:
             raise ValueError(f"Unknown target arch: {row['target-arch']}")
 
     # For PR builds, limit matrix to a single entry for faster CI.
-    if os.environ.get("LIMIT_MATRIX") == "1":
-        rows = rows[:1]
+    # if os.environ.get("LIMIT_MATRIX") == "1":
+    #     rows = rows[:1]
     print(json.dumps(rows))
 
 
