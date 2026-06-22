@@ -22,5 +22,4 @@ jobs:
         with:
           node-version: "20"
 
-      - run: npm install -g prettier
-      - run: prettier --check "**/*.{yml,yaml}"
+      - run: npx prettier@3.6.2 --check "**/*.{yml,yaml}"
