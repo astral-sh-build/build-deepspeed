@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 67befe3..b903af1 100755
+--- a/setup.py
++++ b/setup.py
+@@ -281,6 +281,10 @@ torch_info = {
+     "hip_version": hip_version
+ }
+
++# Auto-generate local version from CUDA and PyTorch versions.
++if torch_available and cuda_version != "0.0":
++    version_str = version_str.split('+')[0] + f"+cu.{cuda_version}.torch.{torch_version}"
++
+ print(f"version={version_str}, git_hash={git_hash}, git_branch={git_branch}")
+ with open('deepspeed/git_version_info_installed.py', 'w') as fd:
+     fd.write(f"version='{version_str}'\n")
