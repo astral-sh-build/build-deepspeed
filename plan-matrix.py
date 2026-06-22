@@ -14,25 +14,26 @@ from packaging.version import Version
 TORCH_VERSIONS = [
     "2.7.1",
     "2.8.0",
-    "2.9.0",
+    "2.9.1",
     "2.10.0",
     "2.11.0",
+    "2.12.1",
 ]
 
 ARCH_TORCH_PAIRS = {
-    "x86_64": ["2.7.1", "2.8.0", "2.9.0", "2.10.0", "2.11.0"],
+    "x86_64": ["2.7.1", "2.8.0", "2.9.1", "2.10.0", "2.11.0", "2.12.1"],
     # TODO(charlie): Depends on creating an aarch64 wheel for `deepspeed-kernels`.
-    # "aarch64": ["2.7.1", "2.8.0", "2.9.0", "2.10.0", "2.11.0"],
+    # "aarch64": ["2.7.1", "2.8.0", "2.9.1", "2.10.0", "2.11.0", "2.12.1"],
 }
 
 # Versions of Python we actually want to include in the matrix.
-# TODO(charlie): DeepSpeed doesn't yet support Python 3.14 (inference v2 import fails).
 PYTHON_VERSIONS = [
     "3.9",
     "3.10",
     "3.11",
     "3.12",
     "3.13",
+    "3.14",
 ]
 
 # Supported Python versions for each PyTorch version.
@@ -40,9 +41,10 @@ PYTHON_VERSIONS = [
 TORCH_PYTHON_SUPPORT = {
     "2.7.1": ["3.9", "3.10", "3.11", "3.12", "3.13"],
     "2.8.0": ["3.9", "3.10", "3.11", "3.12", "3.13"],
-    "2.9.0": ["3.10", "3.11", "3.12", "3.13"],
-    "2.10.0": ["3.10", "3.11", "3.12", "3.13"],
-    "2.11.0": ["3.10", "3.11", "3.12", "3.13"],
+    "2.9.1": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.10.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.11.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.12.1": ["3.10", "3.11", "3.12", "3.13", "3.14"],
 }
 
 # Minimum and maximum CUDA versions for each PyTorch version.
@@ -53,6 +55,7 @@ PYTORCH_CUDA_RANGES: dict[str, tuple[str, str]] = {
     "2.9": ("12.6", "13.0"),
     "2.10": ("12.6", "13.0"),
     "2.11": ("12.6", "13.0"),
+    "2.12": ("12.6", "13.2"),
 }
 
 # Actual CUDA versions to build against for each PyTorch version.
@@ -67,6 +70,8 @@ PYTORCH_CUDA_VERSIONS: dict[tuple[str, str], list[str]] = {
     ("2.10", "aarch64"): ["12.6", "12.8", "12.9", "13.0"],
     ("2.11", "x86_64"): ["12.6", "12.8", "12.9", "13.0"],
     ("2.11", "aarch64"): ["12.6", "12.8", "12.9", "13.0"],
+    ("2.12", "x86_64"): ["12.6", "13.0", "13.2"],
+    ("2.12", "aarch64"): ["12.6", "13.0", "13.2"],
 }
 
 # CUDA architectures to build against for each PyTorch version.
@@ -93,6 +98,10 @@ TORCH_CUDA_ARCH_LIST = {
     ("2.11", "12.8"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     ("2.11", "12.9"): "7.0;7.5;8.0;8.6;9.0;10.0;12.0+PTX",
     ("2.11", "13.0"): "7.5;8.0;8.6;9.0;10.0;11.0;12.0+PTX",
+    # https://github.com/pytorch/pytorch/blob/main/RELEASE.md#pytorch-cuda-support-matrix
+    ("2.12", "12.6"): "7.0;7.5;8.0;8.6;9.0+PTX",
+    ("2.12", "13.0"): "7.5;8.0;8.6;9.0;10.0;12.0+PTX",
+    ("2.12", "13.2"): "7.5;8.0;8.6;9.0;10.0;12.0+PTX",
 }
 
 # The glibc version to use for each PyTorch version, for manylinux builds.
@@ -103,6 +112,7 @@ TORCH_GLIBC_VERSION: dict[str, str] = {
     "2.9": "2_27",
     "2.10": "2_27",
     "2.11": "2_27",
+    "2.12": "2_28",
 }
 
 AUDITWHEEL_BLANKET_EXCLUDES = [
