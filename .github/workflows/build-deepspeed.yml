@@ -69,7 +69,7 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             TAG="${INPUTS_RELEASE_TAG}"
             # Remove -rN suffix if present
-            DEEPSPEED_VERSION=$(printf '%s\\n' "${TAG}" | sed -E 's/-r[0-9]+$//')
+            DEEPSPEED_VERSION=$(sed -E 's/-r[0-9]+$//' <<<"${TAG}")
           else
             DEEPSPEED_VERSION="v0.19.2"
           fi
