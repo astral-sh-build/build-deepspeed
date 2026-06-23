@@ -38,6 +38,9 @@ $ uv pip install --index https://wheels.astral.sh/simple/cu128/ deepspeed
 
 Wheels are available for the following `deepspeed` versions:
 
+- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.2)
+- [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
+- [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
 - [`0.18.9`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.9)
 - [`0.18.8`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.8)
 - [`0.18.7`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.7)
@@ -51,14 +54,16 @@ Wheels are available for the following `deepspeed` versions:
 - [`0.17.6`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.17.6)
 - [`0.17.5`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.17.5)
 
-The latest release, DeepSpeed 0.18.9, supports the following combinations:
+The latest release, DeepSpeed 0.19.2, supports the following combinations:
 
 | PyTorch | Python    | `x86_64` CUDA          |
 | ------- | --------- | ---------------------- |
 | 2.7.1   | 3.9–3.13  | 12.6, 12.8             |
 | 2.8.0   | 3.9–3.13  | 12.6, 12.8, 12.9       |
-| 2.9.0   | 3.10–3.13 | 12.6, 12.8, 12.9, 13.0 |
-| 2.10.0  | 3.10–3.13 | 12.6, 12.8, 12.9, 13.0 |
+| 2.9.1   | 3.10–3.13 | 12.6, 12.8, 12.9, 13.0 |
+| 2.10.0  | 3.10–3.14 | 12.6, 12.8, 12.9, 13.0 |
+| 2.11.0  | 3.10–3.14 | 12.6, 12.8, 12.9, 13.0 |
+| 2.12.1  | 3.10–3.14 | 12.6, 13.0, 13.2       |
 
 ## License
 
