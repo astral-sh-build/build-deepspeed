@@ -54,7 +54,7 @@ suite on an NVIDIA A10G. The wheel is not installed on the local machine.
 
 Wheels are available for the following `deepspeed` versions:
 
-- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.6)
+- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.7)
 - [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
 - [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
 - [`0.18.9`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.9)
