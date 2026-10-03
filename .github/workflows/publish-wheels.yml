@@ -65,5 +65,28 @@ jobs:
           set -euo pipefail
           wheel_count=$(find dist -maxdepth 1 -type f -name '*.whl' | wc -l)
           test "${wheel_count}" -eq "${EXPECTED_WHEELS}"
-          gh release create "${RELEASE_TAG}" ./dist/*.whl --verify-tag \
-            --title "${RELEASE_TAG}" --notes "" --repo "${GITHUB_REPOSITORY}"
+          for attempt in 1 2 3; do
+            if gh release create "${RELEASE_TAG}" ./dist/*.whl --verify-tag \
+              --title "${RELEASE_TAG}" --notes "" --repo "${GITHUB_REPOSITORY}" \
+              2> release-error.log; then
+              break
+            fi
+            cat release-error.log >&2
+            if [ "${attempt}" -eq 3 ] || ! grep -Fq \
+              "HTTP 404: Not Found (https://uploads.github.com/repos/${GITHUB_REPOSITORY}/releases/" \
+              release-error.log; then
+              exit 1
+            fi
+            # gh removes its draft after a failed upload. Retry only after
+            # confirming that no release remains; never overwrite a release.
+            if gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" \
+              > /dev/null 2> release-state.log; then
+              echo "A release already exists; inspect it before retrying." >&2
+              exit 1
+            fi
+            if ! grep -Fq '(HTTP 404)' release-state.log; then
+              cat release-state.log >&2
+              exit 1
+            fi
+            sleep 10
+          done
