@@ -147,7 +147,8 @@ jobs:
             (yum install -y cuda-driver-devel-${{ env.MANYLINUX_CUDA_COMPAT_VERSION }} || true) &&
             (yum install -y glibc glibc-devel || apt-get install -y libc6-dev || apk add --update --no-cache musl-dev || true) &&
             (yum install -y libffi-devel || apt-get install -y libffi-devel || apk add --update --no-cache libffi-devel || true) &&
-            uv pip install --system setuptools hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels triton &&
+            uv pip install --system setuptools hjson ninja numpy packaging psutil py-cpuinfo pydantic pynvml tqdm libaio deepspeed-kernels &&
+            uv pip install --system --index-strategy unsafe-first-match triton --index-url https://download.pytorch.org/whl/cu${MATRIX_CUDA_VERSION} &&
             if [ "${MATRIX_CUDA_VERSION}" = "129" ] && [ "${MATRIX_TORCH_VERSION}" = "2.10" ]; then uv pip install --system cuda-bindings==12.9.4; fi &&
             uv pip install --system --no-cache-dir torch==${{ matrix.torch-version }} --index-url https://download.pytorch.org/whl/cu${MATRIX_CUDA_VERSION} &&
             bash build_scripts/prepare_for_build.sh ${{ steps.deepspeed-version.outputs.version }}
