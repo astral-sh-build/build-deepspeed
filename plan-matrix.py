@@ -36,10 +36,10 @@ PYTHON_VERSIONS = [
     "3.12",
     "3.13",
     "3.14",
-    "3.15",
 ]
 
 # Supported Python versions for each PyTorch version.
+# DeepSpeed imports torch.compile, which does not support Python 3.15 yet.
 # We use these to filter out the matrix.
 TORCH_PYTHON_SUPPORT = {
     "2.7.1": ["3.9", "3.10", "3.11", "3.12", "3.13"],
@@ -48,8 +48,8 @@ TORCH_PYTHON_SUPPORT = {
     "2.10.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
     "2.11.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
     "2.12.1": ["3.10", "3.11", "3.12", "3.13", "3.14"],
-    "2.13.0": ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"],
-    "2.14.1": ["3.10", "3.11", "3.12", "3.13", "3.14", "3.15"],
+    "2.13.0": ["3.10", "3.11", "3.12", "3.13", "3.14"],
+    "2.14.1": ["3.10", "3.11", "3.12", "3.13", "3.14"],
 }
 
 # Minimum and maximum CUDA versions for each PyTorch version.
