@@ -54,7 +54,12 @@ suite on an NVIDIA A10G. The wheel is not installed on the local machine.
 
 Wheels are available for the following `deepspeed` versions:
 
-- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.7)
+- [`0.19.7`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.7)
+- [`0.19.6`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.6)
+- [`0.19.5`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.5)
+- [`0.19.4`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.4)
+- [`0.19.3`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3)
+- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.2)
 - [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
 - [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
 - [`0.18.9`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.9)
@@ -70,7 +75,7 @@ Wheels are available for the following `deepspeed` versions:
 - [`0.17.6`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.17.6)
 - [`0.17.5`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.17.5)
 
-The latest release, DeepSpeed 0.19.2, supports the following combinations:
+The latest release, DeepSpeed 0.19.7, supports the following combinations:
 
 | PyTorch | Python    | `x86_64` CUDA          |
 | ------- | --------- | ---------------------- |
