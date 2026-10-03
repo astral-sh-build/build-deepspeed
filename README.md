@@ -58,7 +58,7 @@ Wheels are available for the following `deepspeed` versions:
 - [`0.19.6`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.6)
 - [`0.19.5`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.5)
 - [`0.19.4`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.4)
-- [`0.19.3`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3)
+- [`0.19.3`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3-r1)
 - [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.2)
 - [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
 - [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
@@ -87,6 +87,18 @@ The latest release, DeepSpeed 0.19.7, supports the following combinations:
 | 2.12.1  | 3.10–3.14 | 12.6, 13.0, 13.2       |
 | 2.13.0  | 3.10–3.14 | 12.6, 13.0, 13.2       |
 | 2.14.1  | 3.10–3.14 | 12.6, 13.0, 13.2       |
+
+## Publishing a release
+
+Create the release tag at the validated build commit, push it, then dispatch
+`build-deepspeed.yml` from that tag with the same `release_tag` input. The
+workflow checks that the tag points to its build commit before building.
+
+If every wheel build succeeded but publishing failed, dispatch
+`publish-wheels.yml` with the existing `release_tag` and original
+`build_run_id`. The publishing workflow checks the build's commit, workflow, and
+successful wheel jobs before downloading its artifacts. It verifies the wheel
+count and publishes without changing the tag or rebuilding the wheels.
 
 ## License
 
