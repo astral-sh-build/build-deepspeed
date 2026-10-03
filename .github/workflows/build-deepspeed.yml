@@ -6,6 +6,7 @@ on:
   pull_request:
     branches:
       - main
+      - "charlie/gpu-audit-*"
   workflow_dispatch:
     inputs:
       release_tag:
@@ -71,7 +72,7 @@ jobs:
             # Remove -rN suffix if present
             DEEPSPEED_VERSION=$(sed -E 's/-r[0-9]+$//' <<<"${TAG}")
           else
-            DEEPSPEED_VERSION="v0.19.2"
+            DEEPSPEED_VERSION="v0.19.3"
           fi
           echo "version=${DEEPSPEED_VERSION}" >> $GITHUB_OUTPUT
           echo "Using DeepSpeed version: ${DEEPSPEED_VERSION}"

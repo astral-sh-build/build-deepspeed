@@ -1,17 +1,20 @@
 # build-deepspeed
 
-Pre-built Linux wheels for [DeepSpeed](https://github.com/deepspeedai/DeepSpeed), across Python,
-PyTorch, CUDA, and CPU architectures.
+Pre-built Linux wheels for
+[DeepSpeed](https://github.com/deepspeedai/DeepSpeed), across Python, PyTorch,
+CUDA, and CPU architectures.
 
 ## Installation
 
-Following the PyTorch convention, artifacts are published to a separate index for each CUDA
-version. Each wheel has a local version suffix that identifies the CUDA and PyTorch versions it was
-built against, such as `deepspeed==0.18.9+cu.12.8.torch.2.10`, and requires the matching PyTorch
+Following the PyTorch convention, artifacts are published to a separate index
+for each CUDA version. Each wheel has a local version suffix that identifies the
+CUDA and PyTorch versions it was built against, such as
+`deepspeed==0.18.9+cu.12.8.torch.2.10`, and requires the matching PyTorch
 release.
 
-Pre-built wheels are available on [Astral's GPU indexes](https://wheels.astral.sh/index.html).
-For example, to install a CUDA 12.8 build:
+Pre-built wheels are available on
+[Astral's GPU indexes](https://wheels.astral.sh/index.html). For example, to
+install a CUDA 12.8 build:
 
 ```console
 $ uv add deepspeed --index astral-cu128=https://wheels.astral.sh/simple/cu128/
@@ -36,8 +39,9 @@ $ uv pip install --index https://wheels.astral.sh/simple/cu128/ deepspeed
 
 ## GPU tests
 
-The `tests/` directory contains a locked uv project that installs the published CUDA 12.8 wheel from the Astral index
-alongside its matching CUDA-enabled PyTorch build. Run the tests on a Modal GPU with:
+The `tests/` directory contains a locked uv project that installs the published
+CUDA 12.8 wheel from the Astral index alongside its matching CUDA-enabled
+PyTorch build. Run the tests on a Modal GPU with:
 
 ```console
 $ modal run tests/modal_app.py
@@ -50,7 +54,7 @@ suite on an NVIDIA A10G. The wheel is not installed on the local machine.
 
 Wheels are available for the following `deepspeed` versions:
 
-- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.2)
+- [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3)
 - [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
 - [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
 - [`0.18.9`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.18.9)
@@ -69,13 +73,15 @@ Wheels are available for the following `deepspeed` versions:
 The latest release, DeepSpeed 0.19.2, supports the following combinations:
 
 | PyTorch | Python    | `x86_64` CUDA          |
-| ------- | --------- | ---------------------- |
+| ------- | --------- | ---------------------- | --- |
 | 2.7.1   | 3.9–3.13  | 12.6, 12.8             |
 | 2.8.0   | 3.9–3.13  | 12.6, 12.8, 12.9       |
 | 2.9.1   | 3.10–3.13 | 12.6, 12.8, 12.9, 13.0 |
 | 2.10.0  | 3.10–3.14 | 12.6, 12.8, 12.9, 13.0 |
 | 2.11.0  | 3.10–3.14 | 12.6, 12.8, 12.9, 13.0 |
 | 2.12.1  | 3.10–3.14 | 12.6, 13.0, 13.2       |
+| 2.13.0  | 3.10–3.15 | 12.6, 13.0, 13.2       | —   |
+| 2.14.1  | 3.10–3.15 | 12.6, 13.0, 13.2       | —   |
 
 ## License
 
