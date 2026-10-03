@@ -58,7 +58,7 @@ Wheels are available for the following `deepspeed` versions:
 - [`0.19.6`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.6)
 - [`0.19.5`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.5)
 - [`0.19.4`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.4)
-- [`0.19.3`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3)
+- [`0.19.3`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.3-r1)
 - [`0.19.2`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.2)
 - [`0.19.1`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.1)
 - [`0.19.0`](https://github.com/astral-sh-build/build-deepspeed/releases/tag/v0.19.0)
